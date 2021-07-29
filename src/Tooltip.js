@@ -134,7 +134,7 @@ const StyledTooltip = styled.div`
   border-radius: 4px;
   filter: drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.1));
   padding: 16px;
-  z-index: 99999;
+  z-index: 1000;
 
   position: absolute;
   left: ${(props) => props.position.x}px;
