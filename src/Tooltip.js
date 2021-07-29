@@ -2,9 +2,6 @@ import styled from "styled-components";
 import React, { useRef, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-/**
- * Tooltip
- */
 const Portal = ({ children }) => {
   return ReactDOM.createPortal(children, document.body);
 };
@@ -14,7 +11,7 @@ export const Tooltip = ({ children, ...props }) => {
 
   const targetRef = useRef(null);
   const tooltipRef = useRef(null);
-  const positionRef = useRef({ x: 50, y: 50 });
+  const positionRef = useRef({ x: 0, y: 0 });
   const [active, setActive] = useState(false);
 
   useEffect(() => {
@@ -26,7 +23,7 @@ export const Tooltip = ({ children, ...props }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    positionTooltip(targetRef.current);
+    setTooltipPosition(targetRef.current);
   }, []);
 
   const handleMouseEnter = () => {
@@ -34,12 +31,8 @@ export const Tooltip = ({ children, ...props }) => {
       return false;
     }
 
-    let targetRect = targetRef.current.getBoundingClientRect();
-    let tooltipRect = tooltipRef.current.getBoundingClientRect();
-    console.log(targetRect);
-
     setActive(true);
-    // console.log(getElementRect(targetRef.current));
+    setTooltipPosition(targetRef.current);
   };
   const handleMouseLeave = () => {
     if (isOpen !== undefined) {
@@ -47,21 +40,17 @@ export const Tooltip = ({ children, ...props }) => {
     }
 
     setActive(false);
-
-    // console.log(getElementRect(targetRef.current));
-  };
-
-  const getElementRect = (el) => {
-    return el.getBoundingClientRect();
   };
 
   /**
-   * - Position tooltip element based on target's position
+   * Position tooltip element based on target's position
    */
-  const positionTooltip = (targetEl) => {
+  const setTooltipPosition = (targetEl) => {
     let targetRect = targetRef.current.getBoundingClientRect();
     let tooltipRect = tooltipRef.current.getBoundingClientRect();
-    console.log(targetRect);
+    // console.log(targetRect);
+    // console.log(tooltipRef.current);
+    // console.log(targetRect);
 
     switch (placement) {
       case "top":
@@ -70,8 +59,46 @@ export const Tooltip = ({ children, ...props }) => {
         positionRef.current.y = targetRect.top - (tooltipRect.height + 16);
         break;
       case "left":
-        positionRef.current.x = targetRect.left - tooltipRect.width;
-        positionRef.current.y = targetRect.top - 25;
+        positionRef.current.x = targetRect.left - tooltipRect.width - 16;
+        positionRef.current.y =
+          targetRect.top + (targetRect.height - tooltipRect.height) / 2;
+        break;
+      case "right":
+        positionRef.current.x = targetRect.right + 16;
+        positionRef.current.y =
+          targetRect.top + (targetRect.height - tooltipRect.height) / 2;
+        break;
+      case "left-start":
+        positionRef.current.x = targetRect.left - tooltipRect.width - 16;
+        positionRef.current.y = targetRect.bottom - tooltipRect.height;
+        break;
+      case "left-end":
+        positionRef.current.x = targetRect.left - tooltipRect.width - 16;
+        positionRef.current.y = targetRect.top;
+        break;
+      case "right-start":
+        positionRef.current.x = targetRect.right + 16;
+        positionRef.current.y = targetRect.bottom - tooltipRect.height;
+        break;
+      case "right-end":
+        positionRef.current.x = targetRect.right + 16;
+        positionRef.current.y = targetRect.top;
+        break;
+      case "bottom-start":
+        positionRef.current.x = targetRect.left;
+        positionRef.current.y = targetRect.bottom + 16;
+        break;
+      case "bottom-end":
+        positionRef.current.x = targetRect.right - tooltipRect.width;
+        positionRef.current.y = targetRect.bottom + 16;
+        break;
+      case "top-start":
+        positionRef.current.x = positionRef.current.x = targetRect.left;
+        positionRef.current.y = targetRect.top - (tooltipRect.height + 16);
+        break;
+      case "top-end":
+        positionRef.current.x = targetRect.right - tooltipRect.width;
+        positionRef.current.y = targetRect.top - (tooltipRect.height + 16);
         break;
       default:
         positionRef.current.x =
@@ -93,6 +120,7 @@ export const Tooltip = ({ children, ...props }) => {
           ref={tooltipRef}
           isActive={active}
           position={positionRef.current}
+          placement={placement}
         >
           {props.content}
         </StyledTooltip>
@@ -111,6 +139,8 @@ const StyledTooltip = styled.div`
   position: absolute;
   left: ${(props) => props.position.x}px;
   top: ${(props) => props.position.y}px;
+  transform: translateY(0);
+  transition: transform 160ms, opacity 160ms;
 
   ${(props) => {
     return "";

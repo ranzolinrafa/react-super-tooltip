@@ -16,21 +16,21 @@ export default function App() {
         <Tooltip content="bottom Tooltip Content">
           <button className="btn">bottom</button>
         </Tooltip>
-        <Tooltip content="bottom-start Content">
+        <Tooltip content="bottom-start Content" placement="bottom-start">
           <button className="btn">bottom-start</button>
         </Tooltip>
-        <Tooltip content="bottom-end Content">
+        <Tooltip content="bottom-end Content" placement="bottom-end">
           <button className="btn">bottom-end</button>
         </Tooltip>
       </div>
       <div className="container">
-        <Tooltip content="right Tooltip Content">
+        <Tooltip content="right Tooltip Content" placement="right">
           <button className="btn">right</button>
         </Tooltip>
-        <Tooltip content="right-start Content">
+        <Tooltip content="right-start Content" placement="right-start">
           <button className="btn">right-start</button>
         </Tooltip>
-        <Tooltip content="right-end Content">
+        <Tooltip content="right-end Content" placement="right-end">
           <button className="btn">right-end</button>
         </Tooltip>
       </div>
@@ -38,10 +38,10 @@ export default function App() {
         <Tooltip content="left Tooltip Content" placement="left">
           <button className="btn">left</button>
         </Tooltip>
-        <Tooltip content="left-start Content">
+        <Tooltip content="left-start Content" placement="left-start">
           <button className="btn">left-start</button>
         </Tooltip>
-        <Tooltip content="left-end Content">
+        <Tooltip content="left-end Content" placement="left-end">
           <button className="btn">left-end</button>
         </Tooltip>
       </div>
@@ -49,10 +49,10 @@ export default function App() {
         <Tooltip content="top Tooltip Content" placement="top">
           <button className="btn">top</button>
         </Tooltip>
-        <Tooltip content="top-start Content">
+        <Tooltip content="top-start Content" placement="top-start">
           <button className="btn">top-start</button>
         </Tooltip>
-        <Tooltip content="top-end Content">
+        <Tooltip content="top-end Content" placement="top-end">
           <button className="btn">top-end</button>
         </Tooltip>
       </div>
