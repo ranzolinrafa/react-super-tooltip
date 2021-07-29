@@ -13,6 +13,7 @@ export const Tooltip = ({ children, ...props }) => {
   const { placement, isOpen } = props;
 
   const targetRef = useRef(null);
+  const tooltipRef = useRef(null);
   const positionRef = useRef({ x: 50, y: 50 });
   const [active, setActive] = useState(false);
 
@@ -32,6 +33,10 @@ export const Tooltip = ({ children, ...props }) => {
     if (isOpen !== undefined) {
       return false;
     }
+
+    let targetRect = targetRef.current.getBoundingClientRect();
+    let tooltipRect = tooltipRef.current.getBoundingClientRect();
+    console.log(targetRect);
 
     setActive(true);
     // console.log(getElementRect(targetRef.current));
@@ -55,18 +60,23 @@ export const Tooltip = ({ children, ...props }) => {
    */
   const positionTooltip = (targetEl) => {
     let targetRect = targetRef.current.getBoundingClientRect();
+    let tooltipRect = tooltipRef.current.getBoundingClientRect();
     console.log(targetRect);
 
     switch (placement) {
       case "top":
+        positionRef.current.x =
+          targetRect.x + (targetRect.width - tooltipRect.width) / 2;
+        positionRef.current.y = targetRect.top - (tooltipRect.height + 16);
+        break;
+      case "left":
+        positionRef.current.x = targetRect.left - tooltipRect.width;
+        positionRef.current.y = targetRect.top - 25;
         break;
       default:
-        positionRef.current.x = targetRect.x + (targetRect.width - 200) / 2;
-        positionRef.current.y = targetRect.y + 16;
-
-        //   tooltipPosition.x =
-        //   elementRect.left + (elementRect.width - tooltipEl.offsetWidth) / 2;
-        // tooltipPosition.y = elementRect.bottom + 16;
+        positionRef.current.x =
+          targetRect.x + (targetRect.width - tooltipRect.width) / 2;
+        positionRef.current.y = targetRect.bottom + 16;
         break;
     }
   };
@@ -79,7 +89,11 @@ export const Tooltip = ({ children, ...props }) => {
         ref: targetRef
       })}
       <Portal>
-        <StyledTooltip isActive={active} position={positionRef.current}>
+        <StyledTooltip
+          ref={tooltipRef}
+          isActive={active}
+          position={positionRef.current}
+        >
           {props.content}
         </StyledTooltip>
       </Portal>
@@ -92,6 +106,7 @@ const StyledTooltip = styled.div`
   border-radius: 4px;
   filter: drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.1));
   padding: 16px;
+  z-index: 99999;
 
   position: absolute;
   left: ${(props) => props.position.x}px;
