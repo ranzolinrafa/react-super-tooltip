@@ -1,6 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { Tooltip } from "./Tooltip";
 import "./styles.css";
+
+/**
+ * Custom Component
+ * Since we are cloning the component at the Tooltip component and
+ * adding a ref this component's ref needs to be forwared
+ */
+const Button = forwardRef((props, ref) => {
+  const { title } = props;
+
+  return (
+    <button ref={ref} {...props}>
+      {title}
+    </button>
+  );
+});
+
+/**
+ * Tooltip component to simulate content as a React Component
+ */
+const TooltipContent = ({ onClick }) => {
+  return (
+    <div className="tooltip-content">
+      <p>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia
+        deserunt odio et enim nisi dignissimos explicabo error, reprehenderit
+        quisquam quam incidunt!
+      </p>
+      <button onClick={onClick}>Fechar</button>
+    </div>
+  );
+};
 
 /**
  * App
@@ -57,12 +88,24 @@ export default function App() {
         </Tooltip>
       </div>
       <div className="container">
-        <Tooltip content="Fixed Tooltip Content" isOpen={isTooltipOpen}>
+        <Tooltip content="Tooltip Content" placement="top">
+          <Button className="btn" title="React.FC ref needs to be forwarded">
+            React FC
+          </Button>
+        </Tooltip>
+      </div>
+      <div className="container">
+        <Tooltip
+          content={
+            <TooltipContent onClick={() => setIsTooltipOpen(!isTooltipOpen)} />
+          }
+          isOpen={isTooltipOpen}
+        >
           <button
             className="btn"
             onClick={() => setIsTooltipOpen(!isTooltipOpen)}
           >
-            isOpen = true
+            isOpen = {isTooltipOpen ? "true" : "false"}
           </button>
         </Tooltip>
       </div>
